@@ -1,29 +1,83 @@
+<div class="col-xs-12">
 <p id="notice"><%= notice %></p>
-
 <h1>Listing Subjects</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>About</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div id="graph">
+</div>
 
-  <tbody>
-    <% @subjects.each do |subject| %>
-      <tr>
-        <td><%= subject.name %></td>
-        <td><%= subject.about %></td>
-        <td><%= link_to 'Show', subject %></td>
-        <td><%= link_to 'Edit', edit_subject_path(subject) %></td>
-        <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+</div>
 
-<br>
+<%= link_to 'New Subject', new_subject_path, class: "btn btn-lg btn-success" %>
+<script>    
+    var roots = <%= raw @subjects.map{|subject| subject.to_node}.to_json %>;
+    console.log(roots);
+    for (var i = 0; i < roots.length; i++){
+    var data = [roots[i]];
+    var width = 500,
+    height = 300;
+    var tree = d3.layout.tree()
+      .size([height, width - 160]);
+    var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.x, d.y]; });
 
-<%= link_to 'New Subject', new_subject_path %>
+
+
+  var svg = d3.select("#graph").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(40,40)");
+
+
+root = data[0];
+  
+update(root);
+
+
+
+}
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+   links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 100; });
+
+  // Declare the nodesâ€¦
+  var node = svg.selectAll("g.node")
+   .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+   .attr("class", "node")
+   .attr("transform", function(d) { 
+    return "translate(" + d.x + "," + d.y + ")"; });
+
+
+  nodeEnter.append("svg:a").attr("xlink:href", function(d) {return "subjects/"+d.id}).append("circle")
+   .attr("r", 10)
+   .style("fill", "green");
+
+  nodeEnter.append("text")
+   .attr("y", function(d) { 
+    return d.children || d._children ? -18 : 18; })
+   .attr("dy", ".35em")
+   .attr("text-anchor", "middle")
+   .text(function(d) { return d.name; })
+   .style("fill-opacity", 1);
+
+  // Declare the linksâ€¦
+  var link = svg.selectAll("path.link")
+   .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+   .attr("class", "link")
+   .attr("d", diagonal);
+
+}
+</script>
+
+ 

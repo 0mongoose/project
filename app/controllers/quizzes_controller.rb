@@ -1,6 +1,6 @@
 class QuizzesController < ApplicationController
-  before_action :set_quiz, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_quiz, only: [:show, :edit, :update, :destroy, :grade]
+  before_action :require_authorization
   # GET /quizzes
   # GET /quizzes.json
   def index
@@ -21,14 +21,21 @@ class QuizzesController < ApplicationController
   def edit
   end
 
+  def grade
+    @quiz.grade(params[:answers])
+    @answers = params[:answers]
+
+  end
+
   # POST /quizzes
   # POST /quizzes.json
   def create
     @quiz = Quiz.new(quiz_params)
-
+    @quiz.student_id = current_user.student.id
+    @quiz.generate (quiz_params[:topics])
     respond_to do |format|
       if @quiz.save
-        format.html { redirect_to @quiz, notice: 'Quiz was successfully created.' }
+        format.html { redirect_to @quiz, notice: '' }
         format.json { render :show, status: :created, location: @quiz }
       else
         format.html { render :new }
@@ -69,6 +76,6 @@ class QuizzesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
-      params.require(:quiz).permit(:result, :no_of_questions)
+      params.require(:quiz).permit(:result, :no_of_questions, :topics)
     end
 end

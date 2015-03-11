@@ -15,9 +15,13 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
-  <div class="field">
+   <div class="field">
     <%= f.label :about %><br>
     <%= f.text_area :about %>
+  </div>
+   <div class="field">
+    <%= f.label :name %><br>
+    <%= f.select :subject_id, Subject.all.collect {|p| (p.id != @subject.id )? [ p.name, p.id ] : '' }.push(['None','']), {}, { :class => 'form-control' } %>
   </div>
   <div class="actions">
     <%= f.submit %>

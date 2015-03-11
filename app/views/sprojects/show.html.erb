@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sproject.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @sproject.description %>
+</p>
+
+<p>
+  <strong>Mode:</strong>
+  <%= @sproject.mode %>
+</p>
+
+<p>
+  <strong>Completed on:</strong>
+  <%= @sproject.completed_on %>
+</p>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Milestones:</h3>
+			<table class="table">	
+			<th>Name</th><th>Difficulty</th>
+			<% @sproject.milestones.each do |milestone|%>
+				<tr>
+				<td><%= link_to milestone.name, milestone_path(milestone)%> </td> <td><%= milestone.difficult %></td>
+				<tr>
+			<% end %>
+			</table>
+		</div>
+		<div class"col-xs-12">
+			<div id="chart">
+			</div>
+		</div>
+	</div>
+</div>
+<%= link_to 'Add Milestone' ,new_milestone_path({:sproject_id => @sproject.id}), class: "btn btn-md btn-success" %>
+
+<%= link_to 'Edit', edit_sproject_path(@sproject) , class: "btn btn-md btn-warning"%> 

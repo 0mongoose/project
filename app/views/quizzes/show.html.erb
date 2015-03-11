@@ -1,14 +1,28 @@
+<div class="col-xs-12">
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Result:</strong>
-  <%= @quiz.result %>
-</p>
 
-<p>
-  <strong>No of questions:</strong>
-  <%= @quiz.no_of_questions %>
-</p>
+<%= form_tag grade_quiz_path, :role => "form", :method => "get" do %>
+<%= hidden_field_tag 'id', @quiz.id%>
+<% @quiz.questions.each do |question| %>
+	<div class="question panel panel-default">
+		<div class ="panel-heading">
+		<%= image_tag question.image.url %>
+		<p>Q: <%= question.content %><p>
+		</div>
+		<div class="options row panel-body">
+			<% question.options.each do |option| %>
+				<div class="col-xs-6">
+					<%= option.content %>
+					<%= radio_button_tag "answers[#{question.id}]", option.id%>
+				</div>
+			<% end %>
+		</div>
+	</div>
+<% end %>
 
-<%= link_to 'Edit', edit_quiz_path(@quiz) %> |
-<%= link_to 'Back', quizzes_path %>
+<div class="controls">
+<button type="submit" class ="btn btn-success" >Submit</button> 
+</div>
+<% end %>
+</div>

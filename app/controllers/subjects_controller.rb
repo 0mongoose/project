@@ -1,10 +1,12 @@
 class SubjectsController < ApplicationController
-  before_action :set_subject, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_subject, only: [:show, :edit, :update, :destroy, :add]
+  before_action :require_authorization
+  
   # GET /subjects
   # GET /subjects.json
   def index
     @subjects = Subject.all
+    @subjects = @subjects.select{|subject| subject.is_basic?}
   end
 
   # GET /subjects/1
@@ -20,6 +22,16 @@ class SubjectsController < ApplicationController
   # GET /subjects/1/edit
   def edit
   end
+
+  def add
+    subject_student = StudentsSubject.new
+    subject_student.student_id = current_user.student.id
+    subject_student.subject_id = @subject.id
+    subject_student.save
+
+    redirect_to subjects_path(@subject), :notice => "Subject Added"
+  end
+
 
   # POST /subjects
   # POST /subjects.json
@@ -69,6 +81,6 @@ class SubjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def subject_params
-      params.require(:subject).permit(:name, :about)
+      params.require(:subject).permit(:name, :about, :childs)
     end
 end

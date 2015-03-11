@@ -39,7 +39,7 @@ gem 'guard-rspec'
 gem 'shoulda', '~> 3.5.0'
 gem 'factory_girl_rails'
 gem 'shoulda-matchers'
-gem 'paperclip'
+gem 'paperclip', github: 'thoughtbot/paperclip'
 gem 'rmagick'
 
 group :development, :test do

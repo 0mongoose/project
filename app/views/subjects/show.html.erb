@@ -10,5 +10,11 @@
   <%= @subject.about %>
 </p>
 
+<h3>Topics:</h3>
+<% @subject.topics.each do |topic|%>
+	<p><%= topic.name %></p>
+<% end %>
+
+<%= link_to 'Add to subjects', add_subject_path(@subject,{id: @subject.id}) %>|
 <%= link_to 'Edit', edit_subject_path(@subject) %> |
 <%= link_to 'Back', subjects_path %>

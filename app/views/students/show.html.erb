@@ -1,19 +1,87 @@
 <p id="notice"><%= notice %></p>
 
-<p>
+<h1>
+    <%= @student.user.name %>'s Profile
+</h1>
+
+<h2>
   <strong>Level:</strong>
   <%= @student.level %>
-</p>
+</h2>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Subjects:</h3>
+			<table class="table">	
+			<th>Name</th><th>Level</th>
+			<% @student.subjects.each do |subject|%>
+				<tr>
+				<td><%= link_to subject.name, subject_path(subject)%> </td> <td><%= @student.get_subject_level(subject.id) %></td>
+				<tr>
+			<% end %>
+			</table>
+		</div>
+		<div class"col-xs-12">
+			<div id="chart">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Projects:</h3>
+			<table class="table">	
+			<th>Name</th><th>Description</th>
+			<% @student.sprojects.each do |sproject|%>
+				<tr>
+				<td><%= link_to sproject.name, sproject_path(sproject)%></td><td><%= sproject.description%></td>
+				<tr>
+			<% end %>
+			</table>
+		</div>
+		<div class"col-xs-12">
+			<div id="chart">
+			</div>
+		</div>
+	</div>
+</div>
 
-<p>
-  <strong>Time:</strong>
-  <%= @student.time %>
-</p>
+<%= link_to 'Take Quiz', quizzes_path({quiz: {result: 0}}), method: :post, class: "btn btn-lg btn-success" %>
 
-<p>
-  <strong>User:</strong>
-  <%= @student.user_id %>
-</p>
+<script>
 
-<%= link_to 'Edit', edit_student_path(@student) %> |
-<%= link_to 'Back', students_path %>
+var w = 200;
+var h = 200;
+var r = h/2;
+var color = d3.scale.category20c();
+
+var data = <%= raw @student.get_all_subjects.to_json %>
+
+var vis = d3.select('#chart').append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+var pie = d3.layout.pie().value(function(d){return d.level});
+
+// declare an arc generator function
+var arc = d3.svg.arc().outerRadius(r);
+
+// select paths, use arc generator to draw
+var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+arcs.append("svg:path")
+    .attr("fill", function(d, i){
+        return color(i);
+    })
+    .attr("d", function (d) {
+        // log the result of the arc generator to show how cool it is :)
+        console.log(arc(d));
+        return arc(d);
+    });
+
+// add the text
+arcs.append("svg:text").style("font-size","1em").attr("transform", function(d){
+			d.innerRadius = 0;
+			d.outerRadius = r;
+    return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
+    return data[i].name;}
+		);
+
+</script>

@@ -11,15 +11,62 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150301014339) do
+ActiveRecord::Schema.define(version: 20150311032222) do
+
+  create_table "goals", force: true do |t|
+    t.string   "name"
+    t.boolean  "completed"
+    t.date     "completed_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "milestone_id"
+  end
+
+  create_table "materials", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "milestones", force: true do |t|
+    t.string   "name"
+    t.integer  "difficult"
+    t.date     "completed_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "sproject_id"
+  end
+
+  create_table "options", force: true do |t|
+    t.string   "content"
+    t.text     "description"
+    t.boolean  "correct"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "projects_subjects", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "questions", force: true do |t|
     t.text     "content"
-    t.string   "type"
+    t.string   "category"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "weight"
+    t.integer  "used"
+    t.integer  "answered"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "quizzes", force: true do |t|
@@ -35,12 +82,28 @@ ActiveRecord::Schema.define(version: 20150301014339) do
     t.integer "question_id"
   end
 
+  create_table "sprojects", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "mode"
+    t.date     "completed_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "students", force: true do |t|
     t.integer  "level"
     t.float    "time"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "students_sprojects", force: true do |t|
+    t.integer  "student_id"
+    t.integer  "sproject_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "students_subjects", force: true do |t|
@@ -53,11 +116,27 @@ ActiveRecord::Schema.define(version: 20150301014339) do
     t.integer "student_id"
     t.integer "topic_id"
     t.float   "level"
+    t.integer "score"
   end
 
   create_table "subjects", force: true do |t|
     t.string   "name"
     t.text     "about"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "subject_id"
+  end
+
+  create_table "subjects_sprojects", force: true do |t|
+    t.integer  "subject_id"
+    t.integer  "sproject_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "subjects_topics", force: true do |t|
+    t.integer  "subject_id"
+    t.integer  "topic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -74,6 +153,7 @@ ActiveRecord::Schema.define(version: 20150301014339) do
     t.integer  "question_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "weight"
   end
 
   create_table "users", force: true do |t|

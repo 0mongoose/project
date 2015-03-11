@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
-
+  before_action :require_authorization
   # GET /questions
   # GET /questions.json
   def index
@@ -69,6 +69,6 @@ class QuestionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
-      params.require(:question).permit(:content, :type, :user_id)
+      params.require(:question).permit(:content, :category, :user_id, :image)
     end
 end

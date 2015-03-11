@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @milestone.name %>
+</p>
+
+<p>
+  <strong>Difficult:</strong>
+  <%= @milestone.difficult %>
+</p>
+
+<p>
+  <strong>Completed on:</strong>
+  <%= @milestone.completed_on %>
+</p>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>Goals:</h3>
+			<table class="table">	
+			<th>Name</th><th>Completed</th>
+			<% @milestone.goals.each do |goal|%>
+				<tr>
+				<td><%= link_to goal.name, goal_path(goal)%> </td> <td><%= goal.completed %></td>
+				<tr>
+			<% end %>
+			</table>
+		</div>
+		<div class"col-xs-12">
+			<div id="chart">
+			</div>
+		</div>
+	</div>
+</div>
+<%= link_to 'Back', sproject_path(@milestone.sproject), class: "btn btn-md btn-default" %>

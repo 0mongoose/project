@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Projects</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Mode</th>
+      <th>Completed on</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sprojects.each do |sproject| %>
+      <tr>
+        <td><%= sproject.name %></td>
+        <td><%= sproject.description %></td>
+        <td><%= sproject.mode %></td>
+        <td><%= sproject.completed_on %></td>
+        <td><%= link_to 'Show', sproject %></td>
+        <td><%= link_to 'Edit', edit_sproject_path(sproject) %></td>
+        <td><%= link_to 'Destroy', sproject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project', new_sproject_path, class: "btn btn-md btn-success" %>
